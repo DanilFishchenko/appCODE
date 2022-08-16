@@ -8,7 +8,7 @@
 import UIKit
 class MainViewController: UITableViewController {
     
-    let restaurantNamesWSections = [[
+    var restaurantNamesWSections = [[
         "Burger Heroes", "Kitchen", "Bonsai"], ["Дастархан",
         "Индокитай", "X.O"], ["Балкан Гриль", "Sherlock Holmes",
         "Speak Easy"], ["Morris Pub", "Вкусные истории",
@@ -19,7 +19,7 @@ class MainViewController: UITableViewController {
     
     let headerTitles = ["Секция 1","Секция 2","Секция 3","Секция 4","Секция 5"]
     
-    let places = Place.GetPlaces()
+    var places = Place.GetPlaces()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +48,7 @@ class MainViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
 
         cell.nameLabel.text = places[indexPath.row].name
-        cell.imageOfPlace.image = UIImage(named: places[indexPath.row].image)
+        cell.imageOfPlace.image = UIImage(named: places[indexPath.row].restaurantImage!)
         cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height/2
         cell.imageOfPlace.clipsToBounds = true
         cell.locationLabel.text = places[indexPath.row].location
@@ -107,7 +107,10 @@ class MainViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    @IBAction func cancelAction(_ segue:UIStoryboardSegue){
-        
+    @IBAction func unwindSegue(_ segue:UIStoryboardSegue){
+        guard let newPlaceVC = segue.source as? NewTableViewController else { return }
+        newPlaceVC.saveNewPlace()
+        places.append(newPlaceVC.newPlace!)
+        tableView.reloadData()
     }
 }
