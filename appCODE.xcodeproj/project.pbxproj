@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		052C67C428B71781004C149A /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 052C67C328B71781004C149A /* StorageManager.swift */; };
 		055A909E2896AA9C00F2F844 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A909D2896AA9C00F2F844 /* MainViewController.swift */; };
 		055A90A02898174200F2F844 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A909F2898174200F2F844 /* CustomTableViewCell.swift */; };
 		055A90A2289DB45B00F2F844 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A90A1289DB45A00F2F844 /* PlaceModel.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		052C67C328B71781004C149A /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		055A909D2896AA9C00F2F844 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		055A909F2898174200F2F844 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		055A90A1289DB45A00F2F844 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				055A909D2896AA9C00F2F844 /* MainViewController.swift */,
 				055A90A328A145C800F2F844 /* NewTableViewController.swift */,
 				055A90A1289DB45A00F2F844 /* PlaceModel.swift */,
+				052C67C328B71781004C149A /* StorageManager.swift */,
 				05BC31612891755D00F9ADCD /* Main.storyboard */,
 				05BC31642891756100F9ADCD /* Assets.xcassets */,
 				05BC31662891756100F9ADCD /* LaunchScreen.storyboard */,
@@ -89,7 +92,6 @@
 				66CC2AD62BAA305A6968D5ED /* Pods-appCODE.debug.xcconfig */,
 				9C9C0F1D4C89A0875FDC5814 /* Pods-appCODE.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -219,6 +221,7 @@
 				055A909E2896AA9C00F2F844 /* MainViewController.swift in Sources */,
 				05BC315C2891755D00F9ADCD /* AppDelegate.swift in Sources */,
 				055A90A428A145C800F2F844 /* NewTableViewController.swift in Sources */,
+				052C67C428B71781004C149A /* StorageManager.swift in Sources */,
 				055A90A2289DB45B00F2F844 /* PlaceModel.swift in Sources */,
 				055A90A02898174200F2F844 /* CustomTableViewCell.swift in Sources */,
 				05BC315E2891755D00F9ADCD /* SceneDelegate.swift in Sources */,

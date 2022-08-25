@@ -5,30 +5,43 @@
 //  Created by Danil Fishchenko on 05.08.2022.
 //
 
-import Foundation
+import RealmSwift
 
-struct Place {
-    var name: String
-    var location: String
-    var type: String
-    var image: String
+class Place : Object {
+    @objc dynamic var name = ""
+    @objc dynamic var location: String?
+    @objc dynamic var type: String?
+    @objc dynamic var imageData: Data?
     
-    static let restaurantNames = [
+    // инициализатор класса (выяснить что за convenience!)
+    convenience init(name:String, location:String?, type:String?, imageData:Data?){
+        self.init()
+        self.name = name
+        self.location = location
+        self.type = type
+        self.imageData = imageData
+    }
+    
+    let restaurantNames = [
         "Burger Heroes", "Kitchen", "Bonsai", "Дастархан",
         "Индокитай", "X.O", "Балкан Гриль", "Sherlock Holmes",
         "Speak Easy", "Morris Pub", "Вкусные истории",
         "Классик", "Love&Life", "Шок", "Бочка"
     ]
-    static func GetPlaces ()->[Place]{
-        
-         var places:[Place] = []
-        
+    func GetPlaces (){
+
         for place in restaurantNames{
-            places.append(Place(name: place, location: "Moscow", type: "Restoraunt", image: place))
+            
+            let image = UIImage(named: place)
+            guard let imageData = image?.pngData() else { return }
+            
+            let newPlace = Place()
+            newPlace.name = place
+            newPlace.location = "Moscow"
+            newPlace.type = "Restaurant"
+            newPlace.imageData = imageData
+            
+             
         }
-        
-        return places
     }
-    
-    
 }

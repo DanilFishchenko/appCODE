@@ -8,17 +8,6 @@
 import UIKit
 class MainViewController: UITableViewController {
     
-    let restaurantNamesWSections = [[
-        "Burger Heroes", "Kitchen", "Bonsai"], ["Дастархан",
-        "Индокитай", "X.O"], ["Балкан Гриль", "Sherlock Holmes",
-        "Speak Easy"], ["Morris Pub", "Вкусные истории",
-        "Классик"], ["Love&Life", "Шок", "Бочка"]
-    ]
-    
-
-    
-    let headerTitles = ["Секция 1","Секция 2","Секция 3","Секция 4","Секция 5"]
-    
     let places = Place.GetPlaces()
     
     override func viewDidLoad() {
