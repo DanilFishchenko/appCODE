@@ -22,26 +22,5 @@ class Place : Object {
         self.imageData = imageData
     }
     
-    let restaurantNames = [
-        "Burger Heroes", "Kitchen", "Bonsai", "Дастархан",
-        "Индокитай", "X.O", "Балкан Гриль", "Sherlock Holmes",
-        "Speak Easy", "Morris Pub", "Вкусные истории",
-        "Классик", "Love&Life", "Шок", "Бочка"
-    ]
-    func GetPlaces (){
-
-        for place in restaurantNames{
-            
-            let image = UIImage(named: place)
-            guard let imageData = image?.pngData() else { return }
-            
-            let newPlace = Place()
-            newPlace.name = place
-            newPlace.location = "Moscow"
-            newPlace.type = "Restaurant"
-            newPlace.imageData = imageData
-            
-             
-        }
-    }
+    
 }

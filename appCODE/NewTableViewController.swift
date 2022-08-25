@@ -8,12 +8,22 @@
 import UIKit
 
 class NewTableViewController: UITableViewController, UINavigationControllerDelegate {
+
+    var imageIsChanged = false
+    
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var imageOfPlace: UIImageView!
+    
+    @IBOutlet weak var placeType: UITextField!
+    @IBOutlet weak var placeName: UITextField!
+    
+    @IBOutlet weak var placeLocation: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = UIView()
-      
+        saveButton.isEnabled = false
+        placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
     }
     //при нажатии на нулевую ячейку выпадает алерт с выбором фото и картинки
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -49,17 +59,56 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
             view.endEditing(true)
         }
     }
-
-
-
+    //сохранение объекта в базу даннных (с проверкой наличия фото)
+    
+    func saveNewPlace() {
+        
+        //проверка на наличие картинки после imagePickerController
+        var image: UIImage?
+        if imageIsChanged {
+            image = imageOfPlace.image //если изменилась, присваиваем фото из пикера
+        } else {
+            image = #imageLiteral(resourceName: "imagePlaceholder") // если не менялась, присваиваем из галереи
+        }
+        
+        let imageData = image?.pngData()// переводим картинку в формат для БД
+        
+       //создаем экземпляр и записываем объект в БД
+        let newPlace = Place(name: placeName.text!,
+                             location: placeLocation.text,
+                             type: placeType.text,
+                             imageData: imageData)
+        print ("inside new place method")
+        StorageManager.saveObject(newPlace)
+    }
+    
+//кнопка Cancel (Возврат без сохранения)
+    @IBAction func cancelAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
 }
+// MARK: Text field delegate
 extension NewTableViewController: UITextFieldDelegate {
+    
+    // Скрываем клавиатуру по нажатию на Done
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
-         
+    }
+    
+    // Метод для отслеживания изменения поля textField - вызывается при изменении в каждом символе
+    @objc private func textFieldChanged() {
+        
+        if placeName.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
     }
 }
+//создаем и показываем picker
 extension NewTableViewController : UIImagePickerControllerDelegate {
     func chooseImagePicker(sourse: UIImagePickerController.SourceType){
         if UIImagePickerController.isSourceTypeAvailable(sourse){
@@ -70,10 +119,12 @@ extension NewTableViewController : UIImagePickerControllerDelegate {
             present(imagePicker, animated: true, completion: nil)
         }
     }
+    //настраиваем picker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         imageOfPlace.image = info[.editedImage] as? UIImage
         imageOfPlace.contentMode = .scaleAspectFill
         imageOfPlace.clipsToBounds = true
+        imageIsChanged = true
         dismiss(animated: true)
     }
 

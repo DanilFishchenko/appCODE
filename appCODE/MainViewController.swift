@@ -6,19 +6,17 @@
 //
 
 import UIKit
+import RealmSwift
 class MainViewController: UITableViewController {
-    
-    let places = Place.GetPlaces()
-    
+    //создаем коллекцию элементов для заполнения результатами из базы данных
+    var places: Results<Place>!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between   presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        //Заполняем коллекцию из базы данных
+        places = realm.objects(Place.self)
     }
+
 
     // MARK: - Table view data source
 
@@ -29,19 +27,28 @@ class MainViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return places.count
+        //количество ячеек=количеству записей из базы (если не 0)
+        return places.isEmpty ? 0 : places.count
+        
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //заполняем ячейки
+        //создаем обычную ячейку, кастим её до нашего кастомного класса
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
-
-        cell.nameLabel.text = places[indexPath.row].name
-        cell.imageOfPlace.image = UIImage(named: places[indexPath.row].image)
-        cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height/2
+        
+        //для ячейки присваиваем место из массива записей БД
+        let place = places[indexPath.row]
+        //раскидываем по полям
+        cell.nameLabel.text = place.name
+        cell.locationLabel.text = place.location
+        cell.typeLabel.text = place.type
+        cell.imageOfPlace.image = UIImage(data: place.imageData!)
+        //скругляем картинку
+        cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2
         cell.imageOfPlace.clipsToBounds = true
-        cell.locationLabel.text = places[indexPath.row].location
-        cell.typeLabel.text = places[indexPath.row].type
+        //метод возвращает одну ячейку каждую итерацию по количеству ячеек из метода numberOfRowsInSection
         return cell
     }
     
@@ -96,7 +103,12 @@ class MainViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    @IBAction func cancelAction(_ segue:UIStoryboardSegue){
+    @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
+        //создаём экземпляр класса, кастим до NewPlaceViewController
+        guard let newPlaceVC = segue.source as? NewTableViewController else { return }
         
+        //вызываем сохранение данных при переходе от  NewPlaceVC на MainVC
+        newPlaceVC.saveNewPlace()
+        tableView.reloadData()
     }
 }
