@@ -14,7 +14,7 @@ class MainViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //Заполняем коллекцию из базы данных
-        places = realm.objects(Place.self)
+        places = realm.objects(Place.self).sorted(byKeyPath: "name", ascending: true)
     }
 
 
@@ -50,6 +50,17 @@ class MainViewController: UITableViewController {
         cell.imageOfPlace.clipsToBounds = true
         //метод возвращает одну ячейку каждую итерацию по количеству ячеек из метода numberOfRowsInSection
         return cell
+    }
+    
+    // MARK: Table view delegate
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let place = places[indexPath.row]
+        let deleteAction = UITableViewRowAction(style: .default, title: "Delete"){ (_, _) in
+            StorageManager.deleteObject(place)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+        }
+        return[deleteAction]
     }
     
   /*  override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
