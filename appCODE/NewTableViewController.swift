@@ -10,9 +10,10 @@ import UIKit
 class NewTableViewController: UITableViewController, UINavigationControllerDelegate {
 
     var imageIsChanged = false
+    var currentPlace: Place?
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var imageOfPlace: UIImageView!
+    @IBOutlet weak var placeImage: UIImageView!
     
     @IBOutlet weak var placeType: UITextField!
     @IBOutlet weak var placeName: UITextField!
@@ -24,6 +25,7 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
         tableView.tableFooterView = UIView()
         saveButton.isEnabled = false
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        setupEditScreen()
     }
     //при нажатии на нулевую ячейку выпадает алерт с выбором фото и картинки
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -61,25 +63,60 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
     }
     //сохранение объекта в базу даннных (с проверкой наличия фото)
     
-    func saveNewPlace() {
-        
+    func savePlace() {
         //проверка на наличие картинки после imagePickerController
         var image: UIImage?
         if imageIsChanged {
-            image = imageOfPlace.image //если изменилась, присваиваем фото из пикера
+            image = placeImage.image //если изменилась, присваиваем фото из пикера
         } else {
             image = #imageLiteral(resourceName: "imagePlaceholder") // если не менялась, присваиваем из галереи
         }
         
         let imageData = image?.pngData()// переводим картинку в формат для БД
         
-       //создаем экземпляр и записываем объект в БД
+       //создаем экземпляр места? записываем в него поля текстовые
         let newPlace = Place(name: placeName.text!,
                              location: placeLocation.text,
                              type: placeType.text,
                              imageData: imageData)
-        print ("inside new place method")
-        StorageManager.saveObject(newPlace)
+        //если редактируем то обновляем данные в базе
+        if currentPlace !== nil{
+            try! realm.write{
+                currentPlace?.name = newPlace.name
+                currentPlace?.location = newPlace.location
+                currentPlace?.type = newPlace.type
+                currentPlace?.imageData = newPlace.imageData
+            }
+            //если место новое то добавляем данные в базу
+        } else {
+            StorageManager.saveObject(newPlace)
+            }
+            
+        }
+    
+ //приватный метод настройки экрана детальных записей
+    private func setupEditScreen() {
+        
+        if currentPlace !== nil{
+            guard let data = currentPlace?.imageData, let image = UIImage(data: data) else { return }
+            placeImage.image = image
+            placeImage.contentMode = .scaleAspectFill
+            placeName.text = currentPlace?.name
+            placeType.text = currentPlace?.type
+            placeLocation.text = currentPlace?.location
+            imageIsChanged = true
+            setupNavigationBar()
+            
+            
+        }
+    }
+    private func setupNavigationBar(){
+        navigationItem.leftBarButtonItem = nil
+        if let topItem = navigationController?.navigationBar.topItem {
+            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        }
+        title = currentPlace?.name
+        saveButton.isEnabled = true
     }
     
 //кнопка Cancel (Возврат без сохранения)
@@ -121,9 +158,9 @@ extension NewTableViewController : UIImagePickerControllerDelegate {
     }
     //настраиваем picker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        imageOfPlace.image = info[.editedImage] as? UIImage
-        imageOfPlace.contentMode = .scaleAspectFill
-        imageOfPlace.clipsToBounds = true
+        placeImage.image = info[.editedImage] as? UIImage
+        placeImage.contentMode = .scaleAspectFill
+        placeImage.clipsToBounds = true
         imageIsChanged = true
         dismiss(animated: true)
     }

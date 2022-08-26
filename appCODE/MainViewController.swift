@@ -53,6 +53,7 @@ class MainViewController: UITableViewController {
     }
     
     // MARK: Table view delegate
+    //В этом методе
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let place = places[indexPath.row]
         let deleteAction = UITableViewRowAction(style: .default, title: "Delete"){ (_, _) in
@@ -105,21 +106,34 @@ class MainViewController: UITableViewController {
     }
     */
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
+    //при переходе по сигвею мы передаем объект из текущей ячейки через сегвей в новый вью контрллер
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        //СИгвеев может быть много, поэтому мы проверяем его название, если это точто надо  то
+        if segue.identifier == "showDetail"{
+            //находим индекс нажатой ячейки
+            guard let indexPath = tableView.indexPathForSelectedRow else { return }
+            //берем из массива элемент по этому индексу
+            let place = places[indexPath.row]
+            
+            //создаём абстрактный экземпляр класса, кастим(Через guard) до нужного NewTableViewController
+            guard let newPlaceVC = segue.destination as? NewTableViewController else { return }
+            //передаём объект в свойство экземпляра. Теперь он доступен в соседнем вьюконтроллере
+            newPlaceVC.currentPlace = place
+        }
     }
-    */
+
     @IBAction func unwindSegue(_ segue: UIStoryboardSegue) {
-        //создаём экземпляр класса, кастим до NewPlaceViewController
+        //создаём абстрактный экземпляр класса, кастим до нужного NewTableViewController
         guard let newPlaceVC = segue.source as? NewTableViewController else { return }
         
         //вызываем сохранение данных при переходе от  NewPlaceVC на MainVC
-        newPlaceVC.saveNewPlace()
+        newPlaceVC.savePlace()
         tableView.reloadData()
     }
 }
