@@ -7,10 +7,13 @@
 
 import UIKit
 import RealmSwift
-class MainViewController: UITableViewController {
+
+class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //создаем коллекцию элементов для заполнения результатами из базы данных
     var places: Results<Place>!
 
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Заполняем коллекцию из базы данных
@@ -25,7 +28,7 @@ class MainViewController: UITableViewController {
 //        places.count
 //    }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //количество ячеек=количеству записей из базы (если не 0)
         return places.isEmpty ? 0 : places.count
@@ -33,7 +36,7 @@ class MainViewController: UITableViewController {
     }
 
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //заполняем ячейки
         //создаем обычную ячейку, кастим её до нашего кастомного класса
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
@@ -53,14 +56,17 @@ class MainViewController: UITableViewController {
     }
     
     // MARK: Table view delegate
-    //В этом методе
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    //В этом методе определяется массив действий над строкой при свайпе
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        //элемент над которым проводится действие
         let place = places[indexPath.row]
+        //определяем само действие (их можно несколько)
         let deleteAction = UITableViewRowAction(style: .default, title: "Delete"){ (_, _) in
             StorageManager.deleteObject(place)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             
         }
+        //возвращаем массив действий
         return[deleteAction]
     }
     

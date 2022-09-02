@@ -13,7 +13,7 @@ class Place : Object {
     @objc dynamic var type: String?
     @objc dynamic var imageData: Data?
     
-    // инициализатор класса (выяснить что за convenience!)
+    // инициализатор класса (назначенный, пожтому сначала надо вызвать инициализатор по умолчанию)
     convenience init(name:String, location:String?, type:String?, imageData:Data?){
         self.init()
         self.name = name

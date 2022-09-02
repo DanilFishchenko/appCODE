@@ -42,6 +42,7 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
             }
             camera.setValue(cameraIcon, forKey: "image")
             camera.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment")
+            
             //вторая кнопка алерта
             let photo = UIAlertAction(title: "Photo", style: .default) { [self] _ in
                 self.chooseImagePicker(sourse: .photoLibrary)
@@ -71,14 +72,14 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
         } else {
             image = #imageLiteral(resourceName: "imagePlaceholder") // если не менялась, присваиваем из галереи
         }
-        
         let imageData = image?.pngData()// переводим картинку в формат для БД
         
-       //создаем экземпляр места? записываем в него поля текстовые
+       //создаем экземпляр места, записываем в него поля текстовые
         let newPlace = Place(name: placeName.text!,
                              location: placeLocation.text,
                              type: placeType.text,
                              imageData: imageData)
+        
         //если редактируем то обновляем данные в базе
         if currentPlace !== nil{
             try! realm.write{
@@ -96,7 +97,7 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
     
  //приватный метод настройки экрана детальных записей
     private func setupEditScreen() {
-        
+        //если редактируем, то выводи поля выбранной ячейки и картинку и вызываем настройку навигации
         if currentPlace !== nil{
             guard let data = currentPlace?.imageData, let image = UIImage(data: data) else { return }
             placeImage.image = image
@@ -110,6 +111,7 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
             
         }
     }
+   //настраиваем навигацию вверху (кнопки и их отображение)
     private func setupNavigationBar(){
         navigationItem.leftBarButtonItem = nil
         if let topItem = navigationController?.navigationBar.topItem {
