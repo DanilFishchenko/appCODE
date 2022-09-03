@@ -22,8 +22,12 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //
         tableView.tableFooterView = UIView()
+        
         saveButton.isEnabled = false
+        
+        //наблюдатель изменения текстового поля. вызывает метод селектора при каждом изменении текстового поля
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         setupEditScreen()
     }
