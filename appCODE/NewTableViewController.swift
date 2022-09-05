@@ -10,7 +10,7 @@ import UIKit
 class NewTableViewController: UITableViewController, UINavigationControllerDelegate {
 
     var imageIsChanged = false
-    var currentPlace: Place?
+    var editingPlace: Place?
     
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var placeImage: UIImageView!
@@ -85,12 +85,12 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
                              imageData: imageData)
         
         //если редактируем то обновляем данные в базе
-        if currentPlace !== nil{
+        if editingPlace !== nil{
             try! realm.write{
-                currentPlace?.name = newPlace.name
-                currentPlace?.location = newPlace.location
-                currentPlace?.type = newPlace.type
-                currentPlace?.imageData = newPlace.imageData
+                editingPlace?.name = newPlace.name
+                editingPlace?.location = newPlace.location
+                editingPlace?.type = newPlace.type
+                editingPlace?.imageData = newPlace.imageData
             }
             //если место новое то добавляем данные в базу
         } else {
@@ -102,13 +102,13 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
  //приватный метод настройки экрана детальных записей
     private func setupEditScreen() {
         //если редактируем, то выводи поля выбранной ячейки и картинку и вызываем настройку навигации
-        if currentPlace !== nil{
-            guard let data = currentPlace?.imageData, let image = UIImage(data: data) else { return }
+        if editingPlace !== nil{
+            guard let data = editingPlace?.imageData, let image = UIImage(data: data) else { return }
             placeImage.image = image
             placeImage.contentMode = .scaleAspectFill
-            placeName.text = currentPlace?.name
-            placeType.text = currentPlace?.type
-            placeLocation.text = currentPlace?.location
+            placeName.text = editingPlace?.name
+            placeType.text = editingPlace?.type
+            placeLocation.text = editingPlace?.location
             imageIsChanged = true
             setupNavigationBar()
             
@@ -121,7 +121,7 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
         if let topItem = navigationController?.navigationBar.topItem {
             topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
-        title = currentPlace?.name
+        title = editingPlace?.name
         saveButton.isEnabled = true
     }
     

@@ -130,7 +130,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             //создаём абстрактный экземпляр класса, кастим(Через guard) до нужного NewTableViewController
             guard let newPlaceVC = segue.destination as? NewTableViewController else { return }
             //передаём объект в свойство экземпляра. Теперь он доступен в соседнем вьюконтроллере
-            newPlaceVC.currentPlace = place
+            newPlaceVC.editingPlace = place
         }
     }
 
