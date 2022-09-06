@@ -12,8 +12,11 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     //создаем коллекцию элементов для заполнения результатами из базы данных
     var places: Results<Place>!
 
+    //доавили аутлет для таблицы
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var reverseSortingButton: UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
         //Заполняем коллекцию из базы данных
@@ -141,5 +144,9 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         //вызываем сохранение данных при переходе от  NewPlaceVC на MainVC
         newPlaceVC.savePlace()
         tableView.reloadData()
+    }
+    @IBAction func sortSelection(_ sender: UISegmentedControl) {
+    }
+    @IBAction func reversedSorting(_ sender: UIBarButtonItem) {
     }
 }
