@@ -129,7 +129,7 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
     @IBAction func cancelAction(_ sender: Any) {
         dismiss(animated: true)
     }
-    
+
 }
 // MARK: Text field delegate
 extension NewTableViewController: UITextFieldDelegate {
@@ -140,6 +140,7 @@ extension NewTableViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+
     
     // Метод для отслеживания изменения поля textField - вызывается при изменении в каждом символе
     @objc private func textFieldChanged() {
@@ -150,6 +151,7 @@ extension NewTableViewController: UITextFieldDelegate {
             saveButton.isEnabled = false
         }
     }
+
 }
 //создаем и показываем picker
 extension NewTableViewController : UIImagePickerControllerDelegate {
@@ -172,4 +174,3 @@ extension NewTableViewController : UIImagePickerControllerDelegate {
     }
 
 }
-

@@ -11,6 +11,7 @@ import RealmSwift
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //создаем коллекцию элементов для заполнения результатами из базы данных
     var places: Results<Place>!
+    var ascendindSorting  = true
 
     //доавили аутлет для таблицы
     @IBOutlet weak var tableView: UITableView!
@@ -20,7 +21,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         //Заполняем коллекцию из базы данных
-        places = realm.objects(Place.self).sorted(byKeyPath: "name", ascending: true)
+        places = realm.objects(Place.self).sorted(byKeyPath: "name", ascending: ascendindSorting)
+        print("Путь realm - \(realm.configuration.fileURL!)")
     }
 
 
@@ -146,7 +148,28 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.reloadData()
     }
     @IBAction func sortSelection(_ sender: UISegmentedControl) {
+        sorting()
     }
+
     @IBAction func reversedSorting(_ sender: UIBarButtonItem) {
+        ascendindSorting.toggle()
+        
+        if ascendindSorting == true{
+            reverseSortingButton.image = #imageLiteral(resourceName: "AZ")
+    }
+        else {
+            reverseSortingButton.image = #imageLiteral(resourceName: "ZA")
+        }
+        sorting()
+    }
+    
+    private func sorting() {
+        if segmentedControl.selectedSegmentIndex == 0 {
+            places = places.sorted(byKeyPath: "date", ascending: ascendindSorting)
+        }
+        else{
+            places = places.sorted(byKeyPath: "name", ascending: ascendindSorting)
+        }
+        tableView.reloadData()
     }
 }
