@@ -10,19 +10,41 @@ import RealmSwift
 
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //создаем коллекцию элементов для заполнения результатами из базы данных
-    var places: Results<Place>!
-    var ascendindSorting  = true
+    private var places: Results<Place>!
+    //отсортированный массив
+    private var filtredPlaces :Results<Place>!
+    //вычисляемое свойство пустой запрос или нет
+    var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    //сортировка по умолчанию
+    private var ascendindSorting  = true
+    //экземпляр поиска
+    private let searchController = UISearchController(searchResultsController: nil)
+    //вычисляемое свойство был поиск или нет
+    private var isFiltering :Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
 
-    //доавили аутлет для таблицы
+    //добавили аутлет для таблицы
     @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var reverseSortingButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Заполняем коллекцию из базы данных
         places = realm.objects(Place.self).sorted(byKeyPath: "name", ascending: ascendindSorting)
         print("Путь realm - \(realm.configuration.fileURL!)")
+        
+        //настраиваем поиск
+        searchController.searchResultsUpdater = self //
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search here"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        
     }
 
 
@@ -33,22 +55,34 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
 //        places.count
 //    }
 
+    //количество ячеек в таблице
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //количество ячеек=количеству записей из базы (если не 0)
-        return places.isEmpty ? 0 : places.count
-        
+        if isFiltering == true {
+            return filtredPlaces.count
+        } else {
+            return places.isEmpty ? 0 : places.count
+        }
     }
 
-    
+    //данные в каждой ячейке
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //заполняем ячейки
         //создаем обычную ячейку, кастим её до нашего кастомного класса
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
         
-        //для ячейки присваиваем место из массива записей БД
-        let place = places[indexPath.row]
-        //раскидываем по полям
+        //для ячейки присваиваем запись из массива записей в БД
+        //создать переменную как экземпляр класса
+        var place = Place()
+        //если фильтруем? то заполнить из отфильтрованного массива
+        if isFiltering {
+            place = filtredPlaces[indexPath.row]
+        } else {
+            //иначе заполнить из основного массива
+            place = places[indexPath.row]
+        }
+        //раскидываем данные по полям в ячейку
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
         cell.typeLabel.text = place.type
@@ -130,7 +164,14 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             //находим индекс нажатой ячейки
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
             //берем из массива элемент по этому индексу
-            let place = places[indexPath.row]
+            var place = Place()
+            //если фильтруем, то передать из отфильтрованного массива
+            if isFiltering {
+                place = filtredPlaces[indexPath.row]
+            } else {
+                //иначе передать из основного массива
+                place = places[indexPath.row]
+            }
             
             //создаём абстрактный экземпляр класса, кастим(Через guard) до нужного NewTableViewController
             guard let newPlaceVC = segue.destination as? NewTableViewController else { return }
@@ -172,4 +213,20 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         tableView.reloadData()
     }
+}
+//подписываем вью контроллер на протокол чтобы отображать результаты поиска в нем
+extension MainViewController:UISearchResultsUpdating{
+    
+    //обновляет результаты поиска сразу при вводе запроса
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    // фильтрует массив нужным образом и записывает результат в отфильтрованный массив
+    private func filterContentForSearchText(_ searchText:String){
+        filtredPlaces = places.where{ $0.name.contains(searchText, options: .caseInsensitive) || $0.location.contains(searchText, options: .caseInsensitive)
+        }
+        tableView.reloadData()
+    }
+    
+    
 }
