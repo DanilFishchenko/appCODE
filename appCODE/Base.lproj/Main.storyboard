@@ -151,6 +151,23 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="140" id="lVj-ki-uR7">
+                                        <rect key="frame" x="0.0" y="519.66666603088379" width="390" height="140"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lVj-ki-uR7" id="hPx-Gg-Of9">
+                                            <rect key="frame" x="0.0" y="0.0" width="390" height="140"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bYF-Qb-D6C" customClass="RatingControl" customModule="appCODE" customModuleProvider="target">
+                                                    <rect key="frame" x="85" y="48" width="220" height="44"/>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="bYF-Qb-D6C" firstAttribute="centerY" secondItem="hPx-Gg-Of9" secondAttribute="centerY" id="EcS-Q6-FBe"/>
+                                                <constraint firstItem="bYF-Qb-D6C" firstAttribute="centerX" secondItem="hPx-Gg-Of9" secondAttribute="centerXWithinMargins" id="iL0-6a-2fx"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -182,7 +199,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EMl-FR-T2Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="Ny3-iE-qed" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="831" y="727"/>
+            <point key="canvasLocation" x="830.76923076923072" y="726.5402843601895"/>
         </scene>
         <!--My Places-->
         <scene sceneID="Ix2-RM-YVe">
