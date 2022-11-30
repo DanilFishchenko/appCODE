@@ -56,6 +56,9 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
 //    }
 
     //количество ячеек в таблице
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         //количество ячеек=количеству записей из базы (если не 0)

@@ -9,12 +9,26 @@ import UIKit
 import SwiftUI
 
 @IBDesignable class RatingControl :UIStackView {
-    //MARK: Init
+
+    //MARK: Declaration
+    var rating = 0
+    
     private var ratingButtons = [UIButton]()
     
-    var rating = 0
-      
+    @IBInspectable var starSize: CGSize = CGSize(width: 44.0, height: 44.0){
+        didSet {
+            setupButtons()
+        }
+    }
     
+    @IBInspectable var starCount: Int = 5 {
+        didSet {
+            setupButtons()
+        }
+    }
+    
+    
+    //MARK: Init
     override init(frame: CGRect) {
         super .init(frame: frame)
         setupButtons()
@@ -27,24 +41,54 @@ import SwiftUI
     
     //MARK: Methods
     @objc func ratingButtonTapped(button:UIButton){
-        print ("Button Tapped 👍 \(button)")
+        print ("Button Tapped 👍 \(ratingButtons.firstIndex(of: button)!)")
+        guard let index = ratingButtons.firstIndex(of: button) else { return }
+        
+                
+        var selectedRiting = index + 1
     }
     
     private func setupButtons() {
         
+        //если уже что-то есть то удаляем это из массива и
+        for button in ratingButtons {
+            removeArrangedSubview(button)
+            removeFromSuperview()
+        }
+        ratingButtons.removeAll()
+        
+        //Звезды
+        let bundle = Bundle(for: type(of: self))
+        let filledStar = UIImage(named: "filledStar",
+                                 in: bundle,
+                                 compatibleWith: self.traitCollection)
+        
+        let emptyStar = UIImage(named: "emptyStar",
+                                in: bundle,
+                                compatibleWith: self.traitCollection)
+        
+        let hilitedStar = UIImage(named: "hilitedStar",
+                                  in: bundle,
+                                  compatibleWith: self.traitCollection)
+        
+        
         //Создаём 5 кнопок
-        for _ in 0..<5 {
+        for _ in 0..<starCount {
         //Создать кнопку
         let button = UIButton()
         //Покрасить кнопку
-        button.backgroundColor = .red
+            button.setImage(emptyStar, for: .normal)
+            button.setImage(filledStar, for: .selected)
+            button.setImage(hilitedStar, for: .highlighted)
+            button.setImage(hilitedStar, for: [.highlighted, .selected])
+            
         //Констрейнты
         // Откючить автоконстрейнты (внутри стекВью не работает по умолчанию? в остальных местах нужно выключать вручную)
         button.translatesAutoresizingMaskIntoConstraints = false
         
         //Высота и ширина кнопки
-        button.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 44.0).isActive = true
+        button.heightAnchor.constraint(equalToConstant: starSize.height).isActive = true
+        button.widthAnchor.constraint(equalToConstant: starSize.width).isActive = true
         button.addTarget(self, action: #selector(ratingButtonTapped(button:)), for: .touchUpInside)
         
         //Добавить объект на вью
@@ -53,9 +97,9 @@ import SwiftUI
         ratingButtons.append(button)
             
         }
-        self.spacing = 8.0
+        
                 
-   
+
     }
     
       

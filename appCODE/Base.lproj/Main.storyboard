@@ -158,13 +158,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="140"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bYF-Qb-D6C" customClass="RatingControl" customModule="appCODE" customModuleProvider="target">
-                                                    <rect key="frame" x="85" y="48" width="220" height="44"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="252" placeholderIntrinsicHeight="44" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="bYF-Qb-D6C" customClass="RatingControl" customModule="appCODE" customModuleProvider="target">
+                                                    <rect key="frame" x="69" y="48" width="252" height="44"/>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="bYF-Qb-D6C" firstAttribute="centerY" secondItem="hPx-Gg-Of9" secondAttribute="centerY" id="EcS-Q6-FBe"/>
-                                                <constraint firstItem="bYF-Qb-D6C" firstAttribute="centerX" secondItem="hPx-Gg-Of9" secondAttribute="centerXWithinMargins" id="iL0-6a-2fx"/>
+                                                <constraint firstItem="bYF-Qb-D6C" firstAttribute="centerY" secondItem="hPx-Gg-Of9" secondAttribute="centerY" id="DSO-SZ-0q2"/>
+                                                <constraint firstItem="bYF-Qb-D6C" firstAttribute="centerX" secondItem="hPx-Gg-Of9" secondAttribute="centerX" id="hvH-mb-o2F"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -363,6 +363,11 @@
             <point key="canvasLocation" x="832" y="-6"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="bYF-Qb-D6C">
+            <size key="intrinsicContentSize" width="252" height="44"/>
+        </designable>
+    </designables>
     <inferredMetricsTieBreakers>
         <segue reference="rvl-W7-r5g"/>
     </inferredMetricsTieBreakers>
