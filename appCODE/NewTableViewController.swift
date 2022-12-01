@@ -22,9 +22,10 @@ class NewTableViewController: UITableViewController, UINavigationControllerDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //
-        tableView.tableFooterView = UIView()
-        
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: tableView.frame.size.width,
+                                                         height: 1))
         saveButton.isEnabled = false
         
         //наблюдатель изменения текстового поля. вызывает метод селектора при каждом изменении текстового поля

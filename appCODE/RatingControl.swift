@@ -11,7 +11,11 @@ import SwiftUI
 @IBDesignable class RatingControl :UIStackView {
 
     //MARK: Declaration
-    var rating = 0
+    var rating = 0 {
+        didSet {
+            updateButtonSelectionState()
+        }
+    }
     
     private var ratingButtons = [UIButton]()
     
@@ -43,9 +47,13 @@ import SwiftUI
     @objc func ratingButtonTapped(button:UIButton){
         print ("Button Tapped 👍 \(ratingButtons.firstIndex(of: button)!)")
         guard let index = ratingButtons.firstIndex(of: button) else { return }
+        var selectedRaiting = index + 1
         
-                
-        var selectedRiting = index + 1
+        if selectedRaiting == rating{
+            rating = 0
+        } else {
+            rating = selectedRaiting
+        }
     }
     
     private func setupButtons() {
@@ -97,10 +105,12 @@ import SwiftUI
         ratingButtons.append(button)
             
         }
-        
-                
-
+        updateButtonSelectionState()
     }
     
-      
+    private func updateButtonSelectionState(){
+        for (index, button) in ratingButtons.enumerated(){
+            button.isSelected = index < rating
+        }
+    }
 }
